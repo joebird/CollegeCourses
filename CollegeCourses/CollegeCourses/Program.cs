@@ -16,11 +16,12 @@ namespace CollegeCourses
             if (input == null)
                 inputArray = ApplicationLogic.courses;
             else
-            {
+                inputArray = input.Split(',');
 
-            }
+
             Console.Read();
         }
+
     }
 
     public static class ApplicationLogic
@@ -35,6 +36,17 @@ namespace CollegeCourses
             "Paper Jet Engines: Introduction to Paper Airplanes"
         };
 
+        public static bool IsValid(string[] inputArray)
+        {
+            // verify that each item in the array has a value followed by a colon followed by at least a space
+            foreach (string item in inputArray)
+            {
+                // get location of colon
+                int location = item.IndexOf(": ");
+                if (location < 1) return false;
+            }
+            return true;
+        }
 
     }
 }
