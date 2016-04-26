@@ -14,10 +14,24 @@ namespace CollegeCoursesTest
         }
 
         [TestMethod]
-        public void TestCourseNameHasImproperFormat()
+        public void TestCourseNameHasImproperFormatMissingFinalSpace()
         {
-            string[] inputArray = new string[] { "a: ", "b:", "c" };
+            string[] inputArray = new string[] { "a:" };
             Assert.IsFalse(ApplicationLogic.IsValid(inputArray));
+        }
+
+        [TestMethod]
+        public void TestCourseNameHasImproperFormatTwoColonSpaceCombos()
+        {
+            string[] inputArray = new string[] { "a: : " };
+            Assert.IsFalse(ApplicationLogic.IsValid(inputArray));
+        }
+
+        [TestMethod]
+        public void TestSimplePrerequisiteOutput()
+        {
+            string[] inputArray = new string[] { "a: ", "b: a" };
+            Assert.AreSame(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, ""), "a, b");
         }
 
     }

@@ -18,6 +18,11 @@ namespace CollegeCourses
             else
                 inputArray = input.Split(',');
 
+            // build list
+            if (ApplicationLogic.IsValid(inputArray))
+            {
+
+            }
 
             Console.Read();
         }
@@ -41,11 +46,21 @@ namespace CollegeCourses
             // verify that each item in the array has a value followed by a colon followed by at least a space
             foreach (string item in inputArray)
             {
-                // get location of colon
+                // get location of colon and space
                 int location = item.IndexOf(": ");
                 if (location < 1) return false;
+
+                // make sure there is only one colon space combo
+                location = item.IndexOf(": ", location + 1);
+                if (location > -1) return false;
             }
             return true;
+        }
+
+        public static string OrderCoursesByPrerequisites(string[] inputArray, string prerequisite)
+        {
+            string output = "a, b";
+            return output;
         }
 
     }
