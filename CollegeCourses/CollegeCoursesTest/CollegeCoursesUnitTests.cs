@@ -57,5 +57,13 @@ namespace CollegeCoursesTest
             Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "a" }, new StringBuilder()), "Circular Reference!");
         }
 
+        [TestMethod]
+        public void TestComplexPrerequisitesOutput()
+        {
+            string[] inputArray = ApplicationLogic.courses;
+            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()), "Introduction to Paper Airplanes, " +
+                "Rubber Band Catapults 101, Advanced Throwing Techniques, History of Cubicle Siege Engines, Paper Jet Engines, Advanced Office Warfare");
+        }
+
     }
 }

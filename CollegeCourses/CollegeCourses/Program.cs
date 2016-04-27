@@ -22,9 +22,7 @@ namespace CollegeCourses
 
             // build list
             if (ApplicationLogic.IsValid(inputArray))
-            {
-
-            }
+                ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder());
 
             Console.Read();
         }
@@ -33,6 +31,8 @@ namespace CollegeCourses
 
     public static class ApplicationLogic
     {
+        private static int count = 0;
+
         public static string[] courses = new string[]
         {
             "Introduction to Paper Airplanes: ",
@@ -59,10 +59,17 @@ namespace CollegeCourses
             return true;
         }
 
+        public static string GetBaseItem(string[] inputArray)
+        {
+
+        }
+
         public static string OrderCoursesByPrerequisites(string[] inputArray, List<string> prerequisites, StringBuilder output)
         {
-            List<string> inputList = new List<string>();
+            count++;
             List<string> prereqList = new List<string>();
+
+            // loop through each item in list looking for prerequisites
             foreach (string item in inputArray)
             {
                 string[] courseInfo = item.Split(new string[] { ": " }, StringSplitOptions.None);
@@ -71,17 +78,18 @@ namespace CollegeCourses
                     prereqList.Add(courseInfo[0]);
                     output.Append(courseInfo[0] + ", ");
                 }
-                else
-                    inputList.Add(item);
             }
 
-            if (inputList.Count > 0)
-                OrderCoursesByPrerequisites(inputList.ToArray(), prereqList, output);
-            else
+            // exit if caught in loop
+            if (count > inputArray.Length + 1) return "Circular Reference!";
+
+            // check to see if any of the added items are prerequisites for any other courses
+            if (prereqList.Count > 0)
+                OrderCoursesByPrerequisites(inputArray, prereqList, output);
+            else  // clean up output string
                 output.Remove(output.Length - 2, 2);
 
             return output.ToString();
         }
-
     }
 }
