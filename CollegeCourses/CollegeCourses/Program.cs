@@ -59,9 +59,28 @@ namespace CollegeCourses
             return true;
         }
 
-        public static List<string> GetBaseItems(string[] inputArray)
+        public static bool HasBaseItems(string[] inputArray)
         {
+            foreach (string item in inputArray)
+            {
+                string[] courseInfo = item.Split(new string[] { ": " }, StringSplitOptions.None);
+                if (courseInfo[1] == "") return true;
 
+            }
+            return false;
+        }
+
+        // In case base items were omitted
+        public static bool GetBaseItems(string[] inputArray)
+        {
+            List<string> prereqList = new List<string>();
+            foreach (string item in inputArray)
+            {
+                string[] courseInfo = item.Split(new string[] { ": " }, StringSplitOptions.None);
+                if (courseInfo[1] == "") return true;
+
+            }
+            return false;
         }
 
         public static string OrderCoursesByPrerequisites(string[] inputArray, List<string> prerequisites, StringBuilder output)

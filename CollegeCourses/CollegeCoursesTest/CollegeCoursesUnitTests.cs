@@ -44,6 +44,13 @@ namespace CollegeCoursesTest
         }
 
         [TestMethod]
+        public void TestMultiplePrerequisiteOutput()
+        {
+            string[] inputArray = new string[] { "c: b", "b: a", "a: d" };
+            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "d" }, new StringBuilder()), "d, a, b, c");
+        }
+
+        [TestMethod]
         public void TestMediumComplexityPrerequisitesOutput()
         {
             string[] inputArray = new string[] { "a: ", "c: d", "b: a", "d: " };
@@ -66,11 +73,19 @@ namespace CollegeCoursesTest
         }
 
         [TestMethod]
+        public void TestHasBaseItems()
+        {
+            string[] inputArray = new string[] { "c: b", "b: a", "a: d" };
+            Assert.IsFalse(ApplicationLogic.HasBaseItems(inputArray));
+            inputArray = new string[] { "c: b", "b: a", "a: d", "d: " };
+            Assert.IsTrue(ApplicationLogic.HasBaseItems(inputArray));
+        }
+
+        [TestMethod]
         public void TestGetBaseItems()
         {
             string[] inputArray = new string[] { "c: b", "b: a", "a: d" };
             Assert.AreEqual(ApplicationLogic.GetBaseItems(inputArray), new List<string> { "d" });
         }
-
     }
 }
