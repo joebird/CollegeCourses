@@ -47,7 +47,7 @@ namespace CollegeCoursesTest
         public void TestMediumComplexityPrerequisitesOutput()
         {
             string[] inputArray = new string[] { "a: ", "c: d", "b: a", "d: " };
-            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()), "a, b");
+            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()), "a, d, c, b");
         }
 
         [TestMethod]

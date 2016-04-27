@@ -61,16 +61,25 @@ namespace CollegeCourses
 
         public static string OrderCoursesByPrerequisites(string[] inputArray, List<string> prerequisites, StringBuilder output)
         {
+            List<string> inputList = new List<string>();
+            List<string> prereqList = new List<string>();
             foreach (string item in inputArray)
             {
                 string[] courseInfo = item.Split(new string[] { ": " }, StringSplitOptions.None);
                 if (prerequisites.Contains(courseInfo[1]))
                 {
+                    prereqList.Add(courseInfo[0]);
                     output.Append(courseInfo[0] + ", ");
                 }
-
+                else
+                    inputList.Add(item);
             }
-            output.Remove(output.Length - 2, 2);
+
+            if (inputList.Count > 0)
+                OrderCoursesByPrerequisites(inputList.ToArray(), prereqList, output);
+            else
+                output.Remove(output.Length - 2, 2);
+
             return output.ToString();
         }
 
