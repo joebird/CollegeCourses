@@ -47,7 +47,7 @@ namespace CollegeCoursesTest
         public void TestMultiplePrerequisiteOutput()
         {
             string[] inputArray = new string[] { "c: b", "b: a", "a: d" };
-            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "d" }, new StringBuilder()), "d, a, b, c");
+            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "d" }, new StringBuilder("d, ")), "d, a, b, c");
         }
 
         [TestMethod]
@@ -73,19 +73,19 @@ namespace CollegeCoursesTest
         }
 
         [TestMethod]
-        public void TestHasBaseItems()
+        public void TestHasSimpleBaseItems()
         {
             string[] inputArray = new string[] { "c: b", "b: a", "a: d" };
-            Assert.IsFalse(ApplicationLogic.HasBaseItems(inputArray));
+            Assert.IsFalse(ApplicationLogic.HasSimpleBaseItems(inputArray));
             inputArray = new string[] { "c: b", "b: a", "a: d", "d: " };
-            Assert.IsTrue(ApplicationLogic.HasBaseItems(inputArray));
+            Assert.IsTrue(ApplicationLogic.HasSimpleBaseItems(inputArray));
         }
 
         [TestMethod]
         public void TestGetBaseItems()
         {
-            string[] inputArray = new string[] { "c: b", "b: a", "a: d" };
-            Assert.AreEqual(ApplicationLogic.GetBaseItems(inputArray), new List<string> { "d" });
+            string[] inputArray = new string[] { "c: b", "x: y", "b: a", "w: x", "a: d" };
+            Assert.AreEqual(ApplicationLogic.GetBaseItems(inputArray), "y, d:x, a");
         }
     }
 }

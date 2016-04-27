@@ -10,21 +10,48 @@ namespace CollegeCourses
         {
             Console.Clear();
 
-            Console.WriteLine("Enter courses here...");
-            string input = Console.ReadLine();
-            string[] inputArray;
+            Console.WriteLine("Enter courses below (course1: prereq1, course2: prereq2, etc.) or type exit to quit:");
+            string input; // = Console.ReadLine();
+            while ((input = Console.ReadLine()) != "exit")
+            {
+                string[] inputArray;
 
-            // get user input or assign default value
-            if (input == null)
-                inputArray = ApplicationLogic.courses;
-            else
-                inputArray = input.Split(',');
+                // get user input or assign default value
+                if (input == "")
+                    inputArray = ApplicationLogic.courses;
+                else
+                    inputArray = input.Split(new string[] { ", " }, StringSplitOptions.None);
 
-            // build list
-            if (ApplicationLogic.IsValid(inputArray))
-                ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder());
-
-            Console.Read();
+                if (ApplicationLogic.IsValid(inputArray))
+                {
+                    // get base courses
+                    bool hasSimpleBaseItmes = ApplicationLogic.HasSimpleBaseItems(inputArray);
+                    if (hasSimpleBaseItmes)
+                        Console.WriteLine(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()));
+                    else
+                    {
+                        string baseItems = ApplicationLogic.GetBaseItems(inputArray);
+                        if (baseItems == "Circular Reference!")
+                            Console.WriteLine(baseItems);
+                        else
+                        {
+                            // get base items from string
+                            string[] baseParts = baseItems.Split(':');
+                            string[] outputBaseArray = baseParts[0].Split(new string[] { ", " }, StringSplitOptions.None);
+                            List<string> prereqList = new List<string>();
+                            foreach (string item in outputBaseArray)
+                                prereqList.Add(item);
+                            StringBuilder outputBase = new StringBuilder();
+                            foreach (string item in outputBaseArray)
+                                outputBase.Append(item + ", ");
+                            Console.WriteLine(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, prereqList, outputBase));
+                        }
+                    }
+                }
+                else
+                    Console.WriteLine("Invalid Input!");
+                Console.WriteLine("\nEnter courses below or type exit to quit:");
+            }
         }
 
     }
@@ -59,7 +86,7 @@ namespace CollegeCourses
             return true;
         }
 
-        public static bool HasBaseItems(string[] inputArray)
+        public static bool HasSimpleBaseItems(string[] inputArray)
         {
             foreach (string item in inputArray)
             {
@@ -70,17 +97,34 @@ namespace CollegeCourses
             return false;
         }
 
-        // In case base items were omitted
-        public static bool GetBaseItems(string[] inputArray)
+        // In case base items were omitted, find any prereqs that don't match up to next level courses
+        public static string GetBaseItems(string[] inputArray)
         {
-            List<string> prereqList = new List<string>();
+            List<string> baseCourseList = new List<string>();
+            List<string> prereqsList = new List<string>();
+            StringBuilder baseCourses = new StringBuilder();
+            StringBuilder secondLevel = new StringBuilder();
+
             foreach (string item in inputArray)
             {
                 string[] courseInfo = item.Split(new string[] { ": " }, StringSplitOptions.None);
-                if (courseInfo[1] == "") return true;
-
+                baseCourseList.Add(courseInfo[0]);
+                prereqsList.Add(courseInfo[1]);
             }
-            return false;
+            for (int i = 0; i < prereqsList.Count; i++)
+            {
+                if (!baseCourseList.Contains(prereqsList[i]))
+                {
+                    baseCourses.Append(prereqsList[i] + ", ");
+                    secondLevel.Append(baseCourseList[i] + ", ");
+                }
+            }
+            if (baseCourses.Length == 0) return "Circular Reference!";
+            baseCourses.Remove(baseCourses.Length - 2, 2);
+            secondLevel.Remove(secondLevel.Length - 2, 2);
+
+            // if the two lists match (and nothing was appended to baseCourses, there must be a circular reference
+            return baseCourses.ToString() + ":" + secondLevel.ToString(); ;
         }
 
         public static string OrderCoursesByPrerequisites(string[] inputArray, List<string> prerequisites, StringBuilder output)
