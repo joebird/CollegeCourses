@@ -54,7 +54,7 @@ namespace CollegeCoursesTest
         public void TestCircularReferenceOutput()
         {
             string[] inputArray = new string[] { "a: b", "b: a" };
-            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()), "a, b");
+            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "a" }, new StringBuilder()), "Circular Reference!");
         }
 
     }
