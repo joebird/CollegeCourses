@@ -42,5 +42,20 @@ namespace CollegeCoursesTest
             string[] inputArray = new string[] { "a: ", "b: a" };
             Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()), "a, b");
         }
+
+        [TestMethod]
+        public void TestMediumComplexityPrerequisitesOutput()
+        {
+            string[] inputArray = new string[] { "a: ", "c: d", "b: a", "d: " };
+            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()), "a, b");
+        }
+
+        [TestMethod]
+        public void TestCircularReferenceOutput()
+        {
+            string[] inputArray = new string[] { "a: b", "b: a" };
+            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()), "a, b");
+        }
+
     }
 }
