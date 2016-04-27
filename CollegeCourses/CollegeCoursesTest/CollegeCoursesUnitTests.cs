@@ -36,5 +36,11 @@ namespace CollegeCoursesTest
             Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()), "a, b");
         }
 
+        [TestMethod]
+        public void TestSimplePrerequisiteOutput()
+        {
+            string[] inputArray = new string[] { "a: ", "b: a" };
+            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()), "a, b");
+        }
     }
 }
