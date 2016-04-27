@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace CollegeCourses
 {
@@ -57,10 +59,19 @@ namespace CollegeCourses
             return true;
         }
 
-        public static string OrderCoursesByPrerequisites(string[] inputArray, string prerequisite)
+        public static string OrderCoursesByPrerequisites(string[] inputArray, List<string> prerequisites, StringBuilder output)
         {
-            string output = "a, b";
-            return output;
+            foreach (string item in inputArray)
+            {
+                string[] courseInfo = item.Split(new string[] { ": " }, StringSplitOptions.None);
+                if (prerequisites.Contains(courseInfo[1]))
+                {
+                    output.Append(courseInfo[0] + ", ");
+                }
+
+            }
+            output.Remove(output.Length - 2, 2);
+            return output.ToString();
         }
 
     }

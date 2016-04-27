@@ -1,5 +1,7 @@
 ﻿using CollegeCourses;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Text;
 
 namespace CollegeCoursesTest
 {
@@ -28,10 +30,10 @@ namespace CollegeCoursesTest
         }
 
         [TestMethod]
-        public void TestSimplePrerequisiteOutput()
+        public void TestNoPrerequisitesOutput()
         {
-            string[] inputArray = new string[] { "a: ", "b: a" };
-            Assert.AreSame(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, ""), "a, b");
+            string[] inputArray = new string[] { "a: ", "b: " };
+            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()), "a, b");
         }
 
     }
