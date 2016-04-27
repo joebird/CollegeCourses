@@ -65,5 +65,12 @@ namespace CollegeCoursesTest
                 "Rubber Band Catapults 101, Advanced Throwing Techniques, History of Cubicle Siege Engines, Paper Jet Engines, Advanced Office Warfare");
         }
 
+        [TestMethod]
+        public void TestGetBaseItems()
+        {
+            string[] inputArray = new string[] { "c: b", "b: a", "a: d" };
+            Assert.AreEqual(ApplicationLogic.GetBaseItems(inputArray), new List<string> { "d" });
+        }
+
     }
 }

@@ -59,7 +59,7 @@ namespace CollegeCourses
             return true;
         }
 
-        public static string GetBaseItem(string[] inputArray)
+        public static List<string> GetBaseItems(string[] inputArray)
         {
 
         }
