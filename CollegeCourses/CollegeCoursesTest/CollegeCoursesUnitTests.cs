@@ -47,7 +47,7 @@ namespace CollegeCoursesTest
         public void TestMultiplePrerequisiteOutput()
         {
             string[] inputArray = new string[] { "c: b", "b: a", "a: d" };
-            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "d" }, new StringBuilder("d, ")), "d, a, b, c");
+            Assert.AreEqual(ApplicationLogic.GetInputsAndOrderCourses(inputArray), "d, a, b, c");
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@ namespace CollegeCoursesTest
         public void TestCircularReferenceOutput()
         {
             string[] inputArray = new string[] { "a: b", "b: a" };
-            Assert.AreEqual(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "a" }, new StringBuilder()), "Circular Reference!");
+            Assert.AreEqual(ApplicationLogic.GetInputsAndOrderCourses(inputArray), "Circular Reference!");
         }
 
         [TestMethod]

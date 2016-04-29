@@ -25,27 +25,12 @@ namespace CollegeCourses
                 if (ApplicationLogic.IsValid(inputArray))
                 {
                     // get base courses
-                    bool hasSimpleBaseItmes = ApplicationLogic.HasSimpleBaseItems(inputArray);
-                    if (hasSimpleBaseItmes)
+                    bool hasSimpleBaseItems = ApplicationLogic.HasSimpleBaseItems(inputArray);
+                    if (hasSimpleBaseItems)
                         Console.WriteLine(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, new List<string> { "" }, new StringBuilder()));
                     else
                     {
-                        string baseItems = ApplicationLogic.GetBaseItems(inputArray);
-                        if (baseItems == "Circular Reference!")
-                            Console.WriteLine(baseItems);
-                        else
-                        {
-                            // get base items from string
-                            string[] baseParts = baseItems.Split(':');
-                            string[] outputBaseArray = baseParts[0].Split(new string[] { ", " }, StringSplitOptions.None);
-                            List<string> prereqList = new List<string>();
-                            foreach (string item in outputBaseArray)
-                                prereqList.Add(item);
-                            StringBuilder outputBase = new StringBuilder();
-                            foreach (string item in outputBaseArray)
-                                outputBase.Append(item + ", ");
-                            Console.WriteLine(ApplicationLogic.OrderCoursesByPrerequisites(inputArray, prereqList, outputBase));
-                        }
+                        Console.WriteLine(ApplicationLogic.GetInputsAndOrderCourses(inputArray));
                     }
                 }
                 else
@@ -53,13 +38,10 @@ namespace CollegeCourses
                 Console.WriteLine("\nEnter courses below or type exit to quit:");
             }
         }
-
     }
 
     public static class ApplicationLogic
     {
-        private static int count = 0;
-
         public static string[] courses = new string[]
         {
             "Introduction to Paper Airplanes: ",
@@ -127,9 +109,25 @@ namespace CollegeCourses
             return baseCourses.ToString() + ":" + secondLevel.ToString(); ;
         }
 
+        public static string GetInputsAndOrderCourses(string[] inputArray)
+        {
+            string baseItems = GetBaseItems(inputArray);
+            if (baseItems == "Circular Reference!")
+                return baseItems;
+            // get base items from string
+            string[] baseParts = baseItems.Split(':');
+            string[] outputBaseArray = baseParts[0].Split(new string[] { ", " }, StringSplitOptions.None);
+            List<string> prereqList = new List<string>();
+            foreach (string item in outputBaseArray)
+                prereqList.Add(item);
+            StringBuilder outputBase = new StringBuilder();
+            foreach (string item in outputBaseArray)
+                outputBase.Append(item + ", ");
+            return OrderCoursesByPrerequisites(inputArray, prereqList, outputBase);
+        }
+
         public static string OrderCoursesByPrerequisites(string[] inputArray, List<string> prerequisites, StringBuilder output)
         {
-            count++;
             List<string> prereqList = new List<string>();
 
             // loop through each item in list looking for prerequisites
@@ -143,14 +141,13 @@ namespace CollegeCourses
                 }
             }
 
-            // exit if caught in loop
-            if (count > inputArray.Length + 1) return "Circular Reference!";
-
             // check to see if any of the added items are prerequisites for any other courses
             if (prereqList.Count > 0)
                 OrderCoursesByPrerequisites(inputArray, prereqList, output);
             else  // clean up output string
+            {
                 output.Remove(output.Length - 2, 2);
+            }
 
             return output.ToString();
         }
